@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>dSideAI Fingerprint — OpenViking Factors</title>
+<style>
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    margin: 0;
+    padding: 24px;
+    line-height: 1.4;
+  }
+  h1 { font-size: 1.4rem; margin-bottom: 4px; }
+  .subtitle { color: #94a3b8; margin-bottom: 24px; font-size: 0.95rem; }
+  .factor {
+    margin-bottom: 18px;
+  }
+  .label-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+  }
+  input[type="range"] {
+    width: 100%;
+    accent-color: #2dd4bf;
+    height: 8px;
+  }
+  .bar-container {
+    background: #1e293b;
+    border-radius: 4px;
+    height: 22px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .bar {
+    height: 100%;
+    background: #2dd4bf;
+    width: 0%;
+    transition: width 0.15s ease;
+  }
+  .total {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid #334155;
+    font-size: 1.05rem;
+  }
+  button {
+    margin-top: 16px;
+    background: #2dd4bf;
+    color: #0f172a;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:hover { background: #5eead4; }
+  .export {
+    margin-top: 12px;
+    background: #1e293b;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    color: #cbd5e1;
+  }
+</style>
+</head>
+<body>
+<h1>dSideAI Fingerprint — OpenViking Decision Factors</h1>
+<div class="subtitle">Drag the sliders. Total should stay near 100. Copy the weights back to chat when ready.</div>
+
+<div id="factors"></div>
+
+<div class="total">Total: <span id="total">100</span></div>
+<button onclick="copyWeights()">Copy weights</button>
+<div id="export" class="export" style="display:none;"></div>
+
+<script>
+const factors = [
+  { name: "Daily cognitive load", weight: 25 },
+  { name: "Interface friction", weight: 20 },
+  { name: "Setup & maintenance", weight: 15 },
+  { name: "Portability", weight: 12 },
+  { name: "Agent workflow fit", weight: 10 },
+  { name: "Risk of complexity", weight: 8 },
+  { name: "Direct cost", weight: 5 },
+  { name: "Reversibility", weight: 5 }
+];
+
+const container = document.getElementById("factors");
+
+function render() {
+  container.innerHTML = "";
+  let total = 0;
+  factors.forEach((f, i) => {
+    total += f.weight;
+    const div = document.createElement("div");
+    div.className = "factor";
+    div.innerHTML = `
+      <div class="label-row">
+        <span>${f.name}</span>
+        <span id="val-${i}">${f.weight}</span>
+      </div>
+      <input type="range" min="0" max="40" value="${f.weight}" 
+             oninput="update(${i}, this.value)">
+      <div class="bar-container">
+        <div class="bar" id="bar-${i}" style="width:${(f.weight/40)*100}%"></div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  document.getElementById("total").textContent = total;
+}
+
+function update(i, val) {
+  factors[i].weight = parseInt(val);
+  document.getElementById("val-" + i).textContent = val;
+  document.getElementById("bar-" + i).style.width = (val / 40) * 100 + "%";
+  let total = factors.reduce((s, f) => s + f.weight, 0);
+  document.getElementById("total").textContent = total;
+}
+
+function copyWeights() {
+  const text = factors.map(f => `${f.name}: ${f.weight}`).join("\n");
+  const exportDiv = document.getElementById("export");
+  exportDiv.style.display = "block";
+  exportDiv.textContent = text;
+  navigator.clipboard.writeText(text).catch(() => {});
+}
+
+render();
+</script>
+</body>
+</html>
