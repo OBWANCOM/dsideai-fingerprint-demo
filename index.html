@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>dSideAI Fingerprint — OpenViking Factors</title>
+<title>dSideAI Fingerprint — Best eCar</title>
 <style>
   body {
     font-family: system-ui, -apple-system, sans-serif;
@@ -71,7 +71,7 @@
 </style>
 </head>
 <body>
-<h1>dSideAI Fingerprint — OpenViking Decision Factors</h1>
+<h1>dSideAI Fingerprint — Best eCar</h1>
 <div class="subtitle">Drag the sliders. Total should stay near 100. Copy the weights back to chat when ready.</div>
 
 <div id="factors"></div>
@@ -82,14 +82,15 @@
 
 <script>
 const factors = [
-  { name: "Daily cognitive load", weight: 25 },
-  { name: "Interface friction", weight: 20 },
-  { name: "Setup & maintenance", weight: 15 },
-  { name: "Portability", weight: 12 },
-  { name: "Agent workflow fit", weight: 10 },
-  { name: "Risk of complexity", weight: 8 },
-  { name: "Direct cost", weight: 5 },
-  { name: "Reversibility", weight: 5 }
+  { name: "Real-world range", weight: 22 },
+  { name: "Charging speed & network", weight: 18 },
+  { name: "Total cost of ownership", weight: 16 },
+  { name: "Safety", weight: 12 },
+  { name: "Reliability & warranty", weight: 10 },
+  { name: "Cargo & passenger space", weight: 8 },
+  { name: "Performance (0-60 / handling)", weight: 7 },
+  { name: "Tech & software updates", weight: 4 },
+  { name: "Design & brand feel", weight: 3 }
 ];
 
 const container = document.getElementById("factors");
